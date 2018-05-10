@@ -8,9 +8,14 @@ import (
 	"time"
 
 	"github.com/Hundemeier/go-sacn/sacn"
-
-	"github.com/MarinX/keylogger"
 )
+
+//KeyEvent is an abstract event for storing the events information
+//If Value is 1 then this is a DOWN event, 0 is UP and 2 is REPEATED
+type KeyEvent struct {
+	Code  uint16
+	Value int32
+}
 
 func main() {
 	multicast := flag.Bool("multicast", true,
@@ -26,14 +31,7 @@ func main() {
 	}
 
 	log.Println("Starting Keylogger...")
-	devs, err := keylogger.NewDevices()
-	logErr(err)
-
-	//keyboard device file, on your system it will be diffrent!
-	rd := keylogger.NewKeyLogger(devs[len(devs)-1])
-
-	in, err := rd.Read()
-	logErr(err)
+	in := getKeylogger()
 
 	log.Println("Starting sACN...")
 	cid := [16]byte{}
@@ -52,27 +50,29 @@ func main() {
 	sacn, err := trans.Activate(uint16(*universe))
 	logErr(err)
 
+	log.Println("Quit with Ctrl+C. Listening for keys...")
+	if *verbose {
+		log.Println("<keyCode> <state> -> <DMX channel> <DMX value>")
+	}
 	data := [512]byte{}
 	for i := range in {
-		//we only need keypresses
-		if i.Type == keylogger.EV_KEY {
-			//check if we have a key down or up
-			if i.Value == 1 {
-				//Key down
-				data[i.Code] = 255
-				sacn <- data
-				if *verbose {
-					log.Printf("%v %v DOWN -> %v 255", i.KeyString(), i.Code+1, i.Code+1)
-				}
-			} else if i.Value == 0 {
-				//Key UP
-				data[i.Code] = 0
-				sacn <- data
-				if *verbose {
-					log.Printf("%v %v UP -> %v 0", i.KeyString(), i.Code+1, i.Code+1)
-				}
+		//check if we have a key down or up
+		if i.Value == 1 {
+			//Key down
+			data[i.Code] = 255
+			sacn <- data
+			if *verbose {
+				log.Printf("%v DOWN -> %v 100%%", i.Code+1, i.Code+1)
+			}
+		} else if i.Value == 0 {
+			//Key UP
+			data[i.Code] = 0
+			sacn <- data
+			if *verbose {
+				log.Printf("%v UP   -> %v 0%%", i.Code+1, i.Code+1)
 			}
 		}
+
 	}
 }
 
