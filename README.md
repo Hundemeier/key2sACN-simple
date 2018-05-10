@@ -7,7 +7,7 @@ Note: the DMX channels are different on every operating system and sometimes eve
 The DMX data can only be send out via the network protocol sACN. Therefore some knowledge in this area is useful. Note: on Windows you can not use multicast at the moment. So you **have to** use a destination ip address: eg `key2sacn.exe -destination="192.168.2.45"`.
 
 Use `./key2sacn -h` or `key2sacn.exe -h` as a quick help. You can exit a running program with `Ctrl+C`.
-Liux: you may have to use root rights: `sudo ./key2sacn`.
+Linux: you have to use root rights: `sudo ./key2sacn`.
 
 This program was originally intended to use with a headless raspberry and a keyboard in an sACN environment. 
 Then this combination is useful if you want some buttons (mind the n-Key rollover!) away from your console.
