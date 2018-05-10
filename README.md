@@ -6,3 +6,4 @@ The DMX data can only be send out via the network protocol sACN. Therefore some 
 
 Use `./key2sacn -h` as a quick help. You can exit a running program with `Ctrl+C`.
 
+This program is written in go and some compiled binaries are available under [releases](https://github.com/Hundemeier/key2sACN/releases).
