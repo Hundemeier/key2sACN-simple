@@ -2,14 +2,25 @@
 
 package main
 
-import "github.com/MarinX/keylogger"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/MarinX/keylogger"
+)
 
 func getKeylogger() chan KeyEvent {
 	devs, err := keylogger.NewDevices()
 	logErr(err)
-
+	index := len(devs) - 1
+	for i, val := range devs {
+		fmt.Println("Id->", val.Id, "Device->", val.Name)
+		if strings.Contains(val.Name, "keyboard") {
+			index = i
+		}
+	}
 	//keyboard device file, on your system it will be diffrent!
-	rd := keylogger.NewKeyLogger(devs[len(devs)-1])
+	rd := keylogger.NewKeyLogger(devs[index])
 
 	in, err := rd.Read()
 	logErr(err)
