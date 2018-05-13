@@ -9,6 +9,10 @@ The DMX data can only be send out via the network protocol sACN. Therefore some 
 Use `./key2sacn -h` or `key2sacn.exe -h` as a quick help. You can exit a running program with `Ctrl+C`.
 Linux: you have to use root rights: `sudo ./key2sacn`.
 
+Note: Linux can distinguish between mutiple keyboards, but this program uses only one at a time and 
+automaticly takes the first keyboard. There is currently no way to specify the keyboard to use.
+
+
 This program was originally intended to use with a headless raspberry and a keyboard in an sACN environment. 
 Then this combination is useful if you want some buttons (mind the n-Key rollover!) away from your console.
 
