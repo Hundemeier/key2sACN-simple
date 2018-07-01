@@ -16,6 +16,11 @@ if GOOS=linux GOARCH=386 go build -o build/key2sACN-linux-32; then
   printf ' '$TICK'\n' $TICK
 fi
 
+printf 'Linux ARM'
+if GOOS=linux GOARCH=arm go build -o build/key2sACN-linux-arm; then
+  printf ' '$TICK'\n' $TICK
+fi
+
 printf 'Windows AMD64'
 if GOOS=windows GOARCH=amd64 go build -o build/key2sACN-windows-64.exe; then
   printf ' '$TICK'\n' $TICK
