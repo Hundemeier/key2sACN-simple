@@ -11,11 +11,12 @@ Linux: you have to use root rights: `sudo ./key2sacn`.
 
 Note: Linux can distinguish between mutiple keyboards, but this program uses only one at a time and 
 automaticly takes the first keyboard. There is currently no way to specify the keyboard to use.
+For more fine-grained options on Linux use [key2sACN](https://github.com/Hundemeier/key2sACN).
 
 
 This program was originally intended to use with a headless raspberry and a keyboard in an sACN environment. 
 Then this combination is useful if you want some buttons (mind the n-Key rollover!) away from your console.
 
-This program is written in go and some compiled binaries are available under [releases](https://github.com/Hundemeier/key2sACN/releases).
+This program is written in go and some compiled binaries are available under [releases](https://github.com/Hundemeier/key2sACN-simple/releases).
 
 It uses the [keylogger](https://github.com/MarinX/keylogger) by MarinX and this sACN library: [sACN](https://github.com/Hundemeier/go-sacn).
