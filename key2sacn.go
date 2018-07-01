@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"log"
 	"math/rand"
@@ -22,9 +23,13 @@ func main() {
 		"set wether multicast should be used for sending out the sACN packets")
 	universe := flag.Uint("universe", 1, "the sACn universe to use")
 	verbose := flag.Bool("verbose", false, "enables output of more information while a key was pressed")
-	destination := flag.String("destination", "", "Set the unicast destination")
+	destination := flag.String("destination", "", "Set the unicast destination. eg: -destination=\"192.168.1.2\"")
 
 	flag.Parse()
+
+	if universe == nil {
+		logErr(errors.New("could not read the universe! Type in like this: -universe=2"))
+	}
 
 	if *universe > 65535 {
 		log.Fatalf("The given universe of %v is too high!", *universe)
@@ -42,7 +47,19 @@ func main() {
 	}
 	trans, err := sacn.NewTransmitter("", cid, "key2sACN")
 	logErr(err)
+
+	//Set multicast:
+	//check for input:
+	if multicast == nil {
+		logErr(errors.New("could not read the multicast flag! Turn multicast of with -multicast=false"))
+	}
 	trans.SetMulticast(uint16(*universe), *multicast)
+
+	//Set destination:
+	//check user input
+	if destination == nil {
+		logErr(errors.New("could not read destination! An example: -destination=\"192.168.1.2\" "))
+	}
 	errs := trans.SetDestinations(uint16(*universe), []string{*destination})
 	for _, v := range errs {
 		logErr(v)
@@ -50,7 +67,13 @@ func main() {
 	sacn, err := trans.Activate(uint16(*universe))
 	logErr(err)
 
+	log.Printf("universe: %v  multicast: %v  destination: %s\n", *universe, *multicast, *destination)
+
 	log.Println("Quit with Ctrl+C. Listening for keys...")
+
+	if verbose == nil {
+		logErr(errors.New("could not determine the state of verbose! Usage: -verbose"))
+	}
 	if *verbose {
 		log.Println("<keyCode> <state> -> <DMX channel> <DMX value>")
 	}
